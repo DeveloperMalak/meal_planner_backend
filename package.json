@@ -1,0 +1,20 @@
+{
+  "name": "dailymeal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Noorullah",
+  "license": "MIT",
+  "description": "designed such app where suggestion of the people will be given priority",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeveloperMalak/dailymeals.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DeveloperMalak/dailymeals/issues"
+  },
+  "homepage": "https://github.com/DeveloperMalak/dailymeals#readme"
+}
