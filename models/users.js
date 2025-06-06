@@ -10,8 +10,6 @@ const usersSchema=mongoose.Schema({
 
 
     email:{
-
-
         type:String,
         requried:[true,"email is requied"],
         trim:true,
@@ -27,10 +25,10 @@ const usersSchema=mongoose.Schema({
   }      
     },
 
-    pasword:{
+    password:{
 
         type:String,
-        minlength:[8,"password must be at least 6 characters"],
+        minlength:[6,"password must be at least 6 characters"],
         required:[true,"password is required"],
     },
     created_at:{

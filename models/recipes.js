@@ -26,3 +26,5 @@ created_at:{
 }
     
 })
+
+module.exports=mongoose.model("Recipe",recipeSchema);
