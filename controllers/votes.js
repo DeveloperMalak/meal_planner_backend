@@ -1,5 +1,6 @@
+const users = require("../models/users");
 const Votes=require("../models/votes");
-
+const Users=require("../models/users")
 const createvote=async(req,res)=>{
     const {voter_id,catndidates_id}=req.body;
 try{
@@ -13,14 +14,50 @@ res.status(500).json({succes:false,messge:"some thing went wrong",e});
 }
 
 const totalvotes=async(req,res)=>{
+try{
+const totalvotescounts=await Votes.aggregate([
+  {
+    $group:{
+      _id:"$candidates_id",
+      count:{$sum:1}
+    }
+  }
+]);
+const voteMap={};
+totalvotescounts.forEach(v=>{
 
+  voteMap[v._id.toString()]=v.count;
+});
+
+//merge user and votes
+const finaluservoteList=Users.map(user=>{
+   const id=user.id;
+   return {
+    id:user.toObject(),
+    voteCount: voteMap[id] || 0
+   }
+})
+
+res.status(200).json({success:true,message:"successfully retrived",finaluservoteList});
+  console.log("success")
+}catch(e){
+res.status(500).json({success:false,message:"somthing went wrong",e});
+  console.log("some thing went wrong");
 }
-const currentuservotes=async(req,res)=>{
-    
 }
 
 
 const deleteVotes=async(req,res)=>{
-try{}catch(e){}
+  const {id}=req.query;
+try{
+  await Votes.deleteOne({_id:id});
+  res.status(200).json({sucess:true, message:"succesfully deleted",});
+  console.log("success");
+}catch(e){
+
+
+  console.log("something went wrong");
+  res.status(500).json({success:false,message:"some thing wernt wrong",e});
+}
 }
 module.exports={createvote,totalvotes,currentuservotes,deleteVotes}
