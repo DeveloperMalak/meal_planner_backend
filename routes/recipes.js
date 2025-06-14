@@ -2,9 +2,9 @@ const  {addrecipe,getallrecipes,}=require("../controllers/recipes");
 const express=require("express");
 const router=express.Router();
 
-router.route("/recipes").post(addrecipe);
+router.route("/add").post(addrecipe);
 
-router.route("/recipes").get(getallrecipes);
+router.route("/all").get(getallrecipes);
 
 
 module.exports=router;

@@ -2,17 +2,27 @@
 const Users=require("../models/users");
 const {}=require("express");
 const  registeruser=async(req,res)=>{
+    
     const {name,email,password}=req.body;
 try{
 
     
- await Users.create({name,email,password});
+const createuser= await Users.create({name,email,password});
  res.status(200).json({
     success:true,
-    message:"User created successfully"
+    message:"User created successfully",
+    user:{
+        id:createuser._id,
+        name:createuser.name,
+        email:createuser.email,
+
+    },
+    token:"dfsdfs"
  });
+ console.log("success")
 }catch(e){
-res.status(500).json({success:false,message:error.message});
+    console.log(e)
+res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
 }
 
 }
@@ -21,13 +31,13 @@ const loginuser=async(req,res)=>{
     const {email,password}=req.body;
 try{
 
-const user=await Users.find({email,password});
+const user=await Users.findOne({email,password});
 if(!user)return res.status(404).json({success:false,message:"user not found"});
-
-res.status(200).josn({user});
+console.log("successfully login")
+res.status(200).json({success:true,message:"login successfull",user,token:"dfsdfsdfsdf"});
 }catch(e){
 console.log(e);
-res.status(500).json({success:false,message:"error finding users"})
+res.status(500).json({success:false,message:"error finding users",error:e})
 }
 }
 

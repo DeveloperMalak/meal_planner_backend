@@ -1,18 +1,17 @@
 require("dotenv").config();
-const http=require("http");
+
 const express=require("express");
 const app=express();
+
 const PORT=5000
-const connectdb=require("../db/connect");
-const routes=require("./routes")
+const connectdb=require("./db/connect");
+const routes=require("./routes/index")
 const url=process.env.MONGODB_URL;
 
-app.get("/",(req,res)=>{
-    res.send("hi noor we have connected to ths");
-});
 
 
-app.use("api/",routes);//this is the middleware
+app.use(express.json());
+app.use("/api",routes);//this is the middleware
 
 //create a server
 const start=async()=>{

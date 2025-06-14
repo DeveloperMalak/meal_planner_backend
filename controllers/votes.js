@@ -2,14 +2,14 @@ const users = require("../models/users");
 const Votes=require("../models/votes");
 const Users=require("../models/users")
 const createvote=async(req,res)=>{
-    const {voter_id,catndidates_id}=req.body;
+    const {voter_id,candidates_id}=req.body;
 try{
-  await Votes.create({voter_id,catndidates_id});
+  await Votes.create({voter_id,candidates_id});
   res.status(200).json({success:true,message:"voted succesfully"});
 console.log("success");
 
 }catch(e){
-res.status(500).json({succes:false,messge:"some thing went wrong",e});
+res.status(500).json({succes:false,messge:"some thing went wrong",error:e});
 }
 }
 
@@ -41,7 +41,7 @@ const finaluservoteList=Users.map(user=>{
 res.status(200).json({success:true,message:"successfully retrived",finaluservoteList});
   console.log("success")
 }catch(e){
-res.status(500).json({success:false,message:"somthing went wrong",e});
+res.status(500).json({success:false,message:"somthing went wrong",error:e});
   console.log("some thing went wrong");
 }
 }
@@ -57,7 +57,7 @@ try{
 
 
   console.log("something went wrong");
-  res.status(500).json({success:false,message:"some thing wernt wrong",e});
+  res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
 }
 }
-module.exports={createvote,totalvotes,currentuservotes,deleteVotes}
+module.exports={createvote,totalvotes,deleteVotes}

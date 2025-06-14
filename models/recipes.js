@@ -10,8 +10,12 @@ name:{
 },
 description:String,
 image:{
-    data:Buffer,
-    required:true,
+    
+    data:{
+        type:Buffer,
+        required:true,
+    },
+
 
 },
 created_by:{
