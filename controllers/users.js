@@ -12,12 +12,21 @@ const createuser= await Users.create({name,email,password});
     success:true,
     message:"User created successfully",
     user:{
+<<<<<<< Updated upstream
         id:createuser._id,
         name:createuser.name,
         email:createuser.email,
 
     },
     token:"dfsdfs"
+=======
+        id:"user id",
+        name:name,
+        email:email,
+
+    },
+    token:"ddkjsdksjdsd"
+>>>>>>> Stashed changes
  });
  console.log("success")
 }catch(e){
@@ -33,8 +42,15 @@ try{
 
 const user=await Users.findOne({email,password});
 if(!user)return res.status(404).json({success:false,message:"user not found"});
+<<<<<<< Updated upstream
 console.log("successfully login")
 res.status(200).json({success:true,message:"login successfull",user,token:"dfsdfsdfsdf"});
+=======
+
+res.status(200).json({success:true,message:"login successfully",user,
+    token:"dksdlkjsldk",
+});
+>>>>>>> Stashed changes
 }catch(e){
 console.log(e);
 res.status(500).json({success:false,message:"error finding users",error:e})

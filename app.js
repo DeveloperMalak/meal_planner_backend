@@ -5,13 +5,21 @@ const app=express();
 
 const PORT=5000
 const connectdb=require("./db/connect");
+<<<<<<< Updated upstream
 const routes=require("./routes/index")
+=======
+const routes=require("./routes")
+>>>>>>> Stashed changes
 const url=process.env.MONGODB_URL;
 
 
 
+<<<<<<< Updated upstream
 app.use(express.json());
 app.use("/api",routes);//this is the middleware
+=======
+app.use("/api/",routes);//this is the middleware
+>>>>>>> Stashed changes
 
 //create a server
 const start=async()=>{
