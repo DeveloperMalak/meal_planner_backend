@@ -13,7 +13,7 @@ image:{
     
     data:{
         type:Buffer,
-        required:true,
+        required:false,
     },
 
 

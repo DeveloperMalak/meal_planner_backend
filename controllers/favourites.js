@@ -1,28 +1,28 @@
 const Favourite=require("../models/favourites");
 
 const createfav=async(req,res)=>{
-    const {}=res.body;
+    const {recipe_id,fav_by}=req.body;
     
     
     try{
 
-        await Favourite.create({});
+        await Favourite.create({recipe_id,fav_by});
         res.status(200).json({success:true,message:"created succesfully",});
         console.log("success");
     }catch(e){
-res.status(500).json({success:false,message:"something went wrong",e});
+res.status(500).json({success:false,message:"something went wrong",error:e});
         console.log(e);
     }
 }
 const getallfav=async(req,res)=>{
-    const {}=res.body;
+
     try{
- const data=await Favourite.find();
+ const data=await Favourite.find({});
 res.status(200).json({success:true,message:"created successfully",data});
 console.log("success")
     }catch(e){
    console.log(e);
-   res.status(500).json({success:false,message:"some thing went wrong"},e)
+   res.status(500).json({success:false,message:"some thing went wrong",error:e},)
 console.log("success")
     }
 }

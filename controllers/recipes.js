@@ -8,7 +8,7 @@ await Recipe.create({name,image,created_by});
 res.status(200).json({success:true,message:"added succesfully"});
 console.log("success");
 }catch(e){
-    res.status(500).json({success:false,message:"failed",e});
+    res.status(500).json({success:false,message:"failed",error:e});
 console.log(e);
 
 }
@@ -20,7 +20,7 @@ const getallrecipes=async(req,res)=>{
              res.status(200).json({success:false,message:"retrived succesfully",data});
 console.log("success");
     }catch(e){
-res.status(500).json({success:false,message:"something went wrong",e})
+res.status(500).json({success:false,message:"something went wrong",error:e})
 
 console.log(e);
     }

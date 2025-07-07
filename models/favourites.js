@@ -15,7 +15,7 @@ const favSchema=mongoose.Schema({
 
         reactions:{
             type:Boolean,
-            required:true,
+            required:false,
             default:false
         }
 

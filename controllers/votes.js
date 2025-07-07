@@ -15,7 +15,8 @@ res.status(500).json({succes:false,messge:"some thing went wrong",error:e});
 
 const totalvotes=async(req,res)=>{
 try{
-const totalvotescounts=await Votes.aggregate([
+  const votes=await Votes.find();
+const totalvotescounts=await votes.aggregate([
   {
     $group:{
       _id:"$candidates_id",
@@ -28,9 +29,9 @@ totalvotescounts.forEach(v=>{
 
   voteMap[v._id.toString()]=v.count;
 });
-
+const users=await Users.find();
 //merge user and votes
-const finaluservoteList=Users.map(user=>{
+const finaluservoteList=users.map(user=>{
    const id=user.id;
    return {
     id:user.toObject(),

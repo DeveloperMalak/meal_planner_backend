@@ -6,32 +6,32 @@ const  registeruser=async(req,res)=>{
     const {name,email,password}=req.body;
 try{
 
-    
+    const exixtinguser=await Users.findOne({email});
+ if(exixtinguser){
+      return res.status(404).json({
+                success: false,
+                message: "User already registered with this email"
+            });
+ }
 const createuser= await Users.create({name,email,password});
  res.status(200).json({
     success:true,
     message:"User created successfully",
     user:{
-<<<<<<< Updated upstream
+ 
         id:createuser._id,
         name:createuser.name,
         email:createuser.email,
 
     },
-    token:"dfsdfs"
-=======
-        id:"user id",
-        name:name,
-        email:email,
-
-    },
+   
     token:"ddkjsdksjdsd"
->>>>>>> Stashed changes
+
  });
  console.log("success")
 }catch(e){
     console.log(e)
-res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
+res.status(500).json({success:false,message:"something wernt wrong",error:e});
 }
 
 }
@@ -42,18 +42,13 @@ try{
 
 const user=await Users.findOne({email,password});
 if(!user)return res.status(404).json({success:false,message:"user not found"});
-<<<<<<< Updated upstream
 console.log("successfully login")
-res.status(200).json({success:true,message:"login successfull",user,token:"dfsdfsdfsdf"});
-=======
+res.status(200).json({success:true,message:"login successfull",user,token:"ddkjsdksjdsd"});
 
-res.status(200).json({success:true,message:"login successfully",user,
-    token:"dksdlkjsldk",
-});
->>>>>>> Stashed changes
+
 }catch(e){
 console.log(e);
-res.status(500).json({success:false,message:"error finding users",error:e})
+res.status(500).json({success:false,message:"something went wrong",error:e})
 }
 }
 
