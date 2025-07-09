@@ -1,4 +1,4 @@
-const  {getallUsers,registeruser, loginuser,}=require("../controllers/users");
+const  {getallUsers,registeruser, loginuser,getUserInfo}=require("../controllers/users");
 const express=require("express");
 const router=express.Router();
 

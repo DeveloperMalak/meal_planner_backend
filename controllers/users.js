@@ -53,9 +53,9 @@ res.status(200).json({ success: true, message: "All users fetched",allusers})
 
 
 const getUserInfo=async(req,res)=>{
-    const {id}=req.headers;
+    const {id}=req.query;
     try{
-        const user=await Users.findOne({id});
+        const user=await Users.findOne({_id:id});
        if(!user)return res.status(404).json({success:false,message:"user not found"});
        console.log("retrived successfull");
        res.status(200).json({success:true,message:"user info fetched",user})

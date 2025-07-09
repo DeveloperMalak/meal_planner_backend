@@ -28,10 +28,10 @@ totalvotescounts.forEach(v=>{
 
   voteMap[v._id.toString()]=v.count;
 });
-
+const usersList=await Users.find();
 //merge user and votes
-const finaluservoteList=Users.map(user=>{
-   const id=user.id;
+const finaluservoteList=usersList.map(user=>{
+   const id=user._id;
    return {
     id:user.toObject(),
     voteCount: voteMap[id] || 0
@@ -47,10 +47,25 @@ res.status(500).json({success:false,message:"somthing went wrong",error:e});
 }
 
 
+const individualsvotes=async(req,res)=>{
+  const {candidates_id}=req.params.candidates_id;
+  try{
+    const count = await Votes.countDocuments({ candidates_id: candidates_id });
+    console.log("Total votes:", count);
+    
+  res.status(200).json({success:true,message:"successfully retrived",totalvotes:count});
+  console.log("success")
+  }catch(e){
+    res.status(500).json({success:false,message:"somthing went wrong",error:e});
+    console.log("some thing went wrong");
+  }
+}
+
+
 const deleteVotes=async(req,res)=>{
-  const {id}=req.query;
+  const {voterid}=req.params.voter_id;
 try{
-  await Votes.deleteOne({_id:id});
+  await Votes.deleteOne({voter_id:voterid});
   res.status(200).json({sucess:true, message:"succesfully deleted",});
   console.log("success");
 }catch(e){
@@ -60,4 +75,4 @@ try{
   res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
 }
 }
-module.exports={createvote,totalvotes,deleteVotes}
+module.exports={createvote,totalvotes,deleteVotes,individualsvotes}
