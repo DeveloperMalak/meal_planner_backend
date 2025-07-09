@@ -51,4 +51,19 @@ res.status(200).json({ success: true, message: "All users fetched",allusers})
 }
 }
 
-module.exports={registeruser,loginuser,getallUsers}
+
+const getUserInfo=async(req,res)=>{
+    const {id}=req.headers;
+    try{
+        const user=await Users.findOne({id});
+       if(!user)return res.status(404).json({success:false,message:"user not found"});
+       console.log("retrived successfull");
+       res.status(200).json({success:true,message:"user info fetched",user})
+
+    }catch(e){
+        console.log(e);
+        res.status(500).json({success:false,message:"some thing went wrong",error:e.message});
+
+    }
+}
+module.exports={registeruser,loginuser,getallUsers,getUserInfo}

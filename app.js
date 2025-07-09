@@ -19,8 +19,8 @@ const start=async()=>{
     try{
 await connectdb(url);//db connected
 console.log("success");
-app.listen(PORT,()=>{
-    console.log('${PORT}yes i am connected http://127.0.0.1:5000/');
+app.listen(PORT,"0.0.0.0",()=>{
+    console.log('${PORT}yes i am connected http://192.168.10.86:5000/');
 })
 
     }catch(e){
