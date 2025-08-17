@@ -4,6 +4,10 @@ const Users=require("../models/users")
 const createvote=async(req,res)=>{
     const {voter_id,candidates_id}=req.body;
 try{
+const alreadyvoted= await Votes.findOne({voter_id});
+if(alreadyvoted){
+  return res.status(400).json({success:false,message:"already casted vote"});
+}
   await Votes.create({voter_id,candidates_id});
   res.status(200).json({success:true,message:"voted succesfully"});
 console.log("success");
@@ -16,7 +20,7 @@ res.status(500).json({succes:false,messge:"some thing went wrong",error:e});
 const totalvotes=async(req,res)=>{
 try{
   const votes=await Votes.find();
-const totalvotescounts=await votes.aggregate([
+const totalvotescounts=await Votes.aggregate([
   {
     $group:{
       _id:"$candidates_id",
@@ -25,24 +29,22 @@ const totalvotescounts=await votes.aggregate([
   }
 ]);
 const voteMap={};
+
 totalvotescounts.forEach(v=>{
 
   voteMap[v._id.toString()]=v.count;
 });
-<<<<<<< HEAD
+const maxvotecount= Math.max(...totalvotescounts.map(e=>e.count))
 const usersList=await Users.find();
 //merge user and votes
 const finaluservoteList=usersList.map(user=>{
    const id=user._id;
-=======
-const users=await Users.find();
-//merge user and votes
-const finaluservoteList=users.map(user=>{
-   const id=user.id;
->>>>>>> 257520c89308750843828c84223fcf572307e0a7
+   const votes=voteMap[id];
    return {
     id:user.toObject(),
-    voteCount: voteMap[id] || 0
+    voteCount: voteMap[id] || 0,
+    role:votes==maxvotecount? "admin":"user",
+  
    }
 })
 
@@ -53,15 +55,39 @@ res.status(500).json({success:false,message:"somthing went wrong",error:e});
   console.log("some thing went wrong");
 }
 }
-
-
-const individualsvotes=async(req,res)=>{
-  const {candidates_id}=req.params.candidates_id;
+const whomivoted=async(req,res)=>{
+  const voter_id=req.params.voter_id;
   try{
-    const count = await Votes.countDocuments({ candidates_id: candidates_id });
+    const mycastedvote=await Votes.findOne({voter_id:voter_id})
+    if(mycastedvote){
+    res.status(200).json({success:true,message:"casted vote",mycastedvote});
+    console.log("success");
+  }else{
+   res.status(404).json({success:false,message:"no casted votes",}) 
+  }
+
+  }catch(e){
+    res.status(500).json({success:false,message:"somthing went wrong",error:e});
+    console.log("some thing went wrong");
+  }
+}
+const individualsvotes=async(req,res)=>{
+  const candidates_id=req.params.candidates_id;
+  try{
+    const votes=Votes.find();
+    const totalvotescounts=await Votes.aggregate([
+      {
+        $group:{
+          _id:"$candidates_id",
+          count:{$sum:1}
+        }
+      }
+    ]);
+    const maxvotecount= Math.max(...totalvotescounts.map(e=>e.count))
+    const count = await Votes.countDocuments({ candidates_id: candidates_id});
     console.log("Total votes:", count);
-    
-  res.status(200).json({success:true,message:"successfully retrived",totalvotes:count});
+  
+  res.status(200).json({success:true,message:"successfully retrived", votes:count,role:count==maxvotecount?"admin":"user"});
   console.log("success")
   }catch(e){
     res.status(500).json({success:false,message:"somthing went wrong",error:e});
@@ -70,11 +96,12 @@ const individualsvotes=async(req,res)=>{
 }
 
 
+
 const deleteVotes=async(req,res)=>{
-  const {voterid}=req.params.voter_id;
+  const voter_id=req.params.voter_id;
 try{
-  await Votes.deleteOne({voter_id:voterid});
-  res.status(200).json({sucess:true, message:"succesfully deleted",});
+  await Votes.deleteOne({voter_id:voter_id});
+  res.status(200).json({sucess:true, message:"vote deleted",});
   console.log("success");
 }catch(e){
 
@@ -83,4 +110,4 @@ try{
   res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
 }
 }
-module.exports={createvote,totalvotes,deleteVotes,individualsvotes}
+module.exports={createvote,totalvotes,deleteVotes,individualsvotes,whomivoted}

@@ -5,6 +5,6 @@ const router=express.Router();
 router.route("/add").post(createfav);
 
 router.route("/delete").delete(unfav);
-router.route("/allfav").get(getallfav);
+router.route("/allmyfav").get(getallfav);
 
 module.exports=router;

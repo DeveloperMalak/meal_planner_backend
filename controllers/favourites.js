@@ -7,7 +7,7 @@ const createfav=async(req,res)=>{
     try{
 
         await Favourite.create({recipe_id,fav_by});
-        res.status(200).json({success:true,message:"created succesfully",});
+        res.status(200).json({success:true,message:"fav created succesfully",});
         console.log("success");
     }catch(e){
 res.status(500).json({success:false,message:"something went wrong",error:e});
@@ -18,7 +18,7 @@ const getallfav=async(req,res)=>{
 
     try{
  const data=await Favourite.find({});
-res.status(200).json({success:true,message:"created successfully",data});
+res.status(200).json({success:true,message:"retrived successfully",data});
 console.log("success")
     }catch(e){
    console.log(e);

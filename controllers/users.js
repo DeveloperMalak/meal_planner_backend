@@ -1,6 +1,7 @@
 
 const Users=require("../models/users");
 const {}=require("express");
+const Votes = require("../models/votes");
 const  registeruser=async(req,res)=>{
     
     const {name,email,password}=req.body;
@@ -64,12 +65,31 @@ res.status(200).json({ success: true, message: "All users fetched",allusers})
 
 
 const getUserInfo=async(req,res)=>{
-    const {id}=req.query;
+    const id=req.params.id;
     try{
+      const votes=await Votes.find();
+    const totalvotescounts=await Votes.aggregate([
+      {
+        $group:{
+          _id:"$candidates_id",
+          count:{$sum:1}
+        }
+      }
+    ]);
+    const voteMap={};
+    
+    totalvotescounts.forEach(v=>{
+    
+      voteMap[v._id.toString()]=v.count;
+    });
+    const maxvotecount= Math.max(...totalvotescounts.map(e=>e.count))
         const user=await Users.findOne({_id:id});
+        const count=await Votes.countDocuments({candidates_id:id})
        if(!user)return res.status(404).json({success:false,message:"user not found"});
        console.log("retrived successfull");
-       res.status(200).json({success:true,message:"user info fetched",user})
+       res.status(200).json({success:true,message:"user info fetched",user:user,
+        votecount:count,
+        role:count==maxvotecount?"admin":"user"})
 
     }catch(e){
         console.log(e);
