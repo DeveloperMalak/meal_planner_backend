@@ -15,6 +15,10 @@ try{
             });
  }
 const createuser= await Users.create({name,email,password});
+const io=req.app.get("io");
+io.emit("new user",{ id:createuser._id,
+  name:createuser.name,
+  email:createuser.email,})
  res.status(200).json({
     success:true,
     message:"User created successfully",
@@ -29,6 +33,8 @@ const createuser= await Users.create({name,email,password});
     token:"ddkjsdksjdsd"
 
  });
+
+
  console.log("success")
 }catch(e){
     console.log(e)
