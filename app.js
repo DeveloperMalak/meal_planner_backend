@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const connectdb = require("./db/connect");
 const express=require("express");
 const app=express();
 const http=require("http");
@@ -12,8 +12,8 @@ const io=new Server(server,{
         credentials:false
       }
 });
-const PORT = process.env.PORT || 5000;  // ← CORRECTconst connectdb=require("./db/connect");
-
+// FIX 1: Use backticks and Railway's PORT
+const PORT = process.env.PORT || 5000
 const routes=require("./routes/index")
 
 
