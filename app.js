@@ -12,8 +12,7 @@ const io=new Server(server,{
         credentials:false
       }
 });
-const PORT=5000
-const connectdb=require("./db/connect");
+const PORT = process.env.PORT || 5000;  // ← CORRECTconst connectdb=require("./db/connect");
 
 const routes=require("./routes/index")
 
