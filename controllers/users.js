@@ -15,6 +15,7 @@ try{
             });
  }
 const createuser= await Users.create({name,email,password});
+await new Promise(resolve => setTimeout(resolve, 100));
 const io=req.app.get("io");
 io.emit("new user",{ id:createuser._id,
   name:createuser.name,
