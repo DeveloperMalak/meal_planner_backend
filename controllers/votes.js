@@ -9,6 +9,10 @@ if(alreadyvoted){
   return res.status(400).json({success:false,message:"already casted vote"});
 }
   await Votes.create({voter_id,candidates_id});
+  await new Promise(resolve => setTimeout(resolve, 100));
+const io=req.app.get("io");
+io.emit("new vote",{ voter_id:voter_id,candidates_id:candidates_id});
+ 
   res.status(200).json({success:true,message:"voted succesfully"});
 console.log("success");
 
@@ -101,6 +105,11 @@ const deleteVotes=async(req,res)=>{
   const voter_id=req.params.voter_id;
 try{
   await Votes.deleteOne({voter_id:voter_id});
+
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const io=req.app.get("io");
+  io.emit("vote deleted",{ voter_id:voter_id,candidates_id:candidates_id})
   res.status(200).json({sucess:true, message:"vote deleted",});
   console.log("success");
 }catch(e){
