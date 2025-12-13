@@ -10,7 +10,7 @@ const createfav=async(req,res)=>{
         await Favourite.create({recipe_id,fav_by});
         await new Promise(resolve => setTimeout(resolve, 100));
         const io=req.app.get("io");
-        io.emit("new user",{ id:createuser._id,
+        io.emit("new fav",{ id:createuser._id,
           name:createuser.name,
           email:createuser.email,})
 
@@ -57,5 +57,7 @@ res.status(500).json({success:false,message:"somthing went wrong",error:e});
   console.log("some thing went wrong");
 }
 }
+
+const unfav=async(req,res)=>{}
 
 module.exports={createfav,getallfav,unfav}
