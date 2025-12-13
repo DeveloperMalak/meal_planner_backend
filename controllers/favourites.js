@@ -1,4 +1,5 @@
 const Favourite=require("../models/favourites");
+const Recipe=require("../models/recipes");
 
 const createfav=async(req,res)=>{
     const {recipe_id,fav_by}=req.body;
@@ -7,6 +8,12 @@ const createfav=async(req,res)=>{
     try{
 
         await Favourite.create({recipe_id,fav_by});
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const io=req.app.get("io");
+        io.emit("new user",{ id:createuser._id,
+          name:createuser.name,
+          email:createuser.email,})
+
         res.status(200).json({success:true,message:"fav created succesfully",});
         console.log("success");
     }catch(e){
@@ -15,29 +22,40 @@ res.status(500).json({success:false,message:"something went wrong",error:e});
     }
 }
 const getallfav=async(req,res)=>{
-
-    try{
- const data=await Favourite.find({});
-res.status(200).json({success:true,message:"retrived successfully",data});
-console.log("success")
-    }catch(e){
-   console.log(e);
-   res.status(500).json({success:false,message:"some thing went wrong",error:e},)
-console.log("success")
+try{
+  const favrecipes=await Favourite.find();
+const totalfavcounts=await favrecipes.aggregate([
+  {
+    $group:{
+      _id:"$recipe_id",
+      count:{$sum:1}
     }
+  }
+]);
+const favMap={};
+
+totalfavcounts.forEach(v=>{
+
+  favMap[v._id.toString()]=v.count;
+});
+const recipesList=await Recipe.find();
+//merge user and votes
+const finalfavList=recipesList.map(rec=>{
+   const id=rec._id;
+   const fav=favMap[id];
+   return {
+    id:rec.toObject(),
+    favCount: favMap[id] || 0,
+  
+   }
+})
+
+res.status(200).json({success:true,message:"successfully retrived",finalfavList});
+  console.log("success")
+}catch(e){
+res.status(500).json({success:false,message:"somthing went wrong",error:e});
+  console.log("some thing went wrong");
 }
-const unfav=async(req,res)=>{
-    const {id}=res.query;
-    try{
-     await Favourite.deleteOne({_id:id});
-        res.status(200).json({success:true,message:"deleted succesfully"});
-console.log("success")
-
-
-    }catch(e){
-        res.status(500).json({success:false,message:"something went wrong",error:e})
-        console.log(e);
-    }
 }
 
 module.exports={createfav,getallfav,unfav}
