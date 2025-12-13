@@ -7,12 +7,12 @@ const createfav=async(req,res)=>{
     
     try{
 
-        await Favourite.create({recipe_id,fav_by});
+        const fav=await Favourite.create({recipe_id,fav_by});
         await new Promise(resolve => setTimeout(resolve, 100));
         const io=req.app.get("io");
-        io.emit("new fav",{ id:createuser._id,
-          name:createuser.name,
-          email:createuser.email,})
+        io.emit("new fav",{ id:fav._id,
+          recipe:fav.recipe_id,
+          user:fav.fav_by,})
 
         res.status(200).json({success:true,message:"fav created succesfully",});
         console.log("success");
