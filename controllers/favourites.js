@@ -24,7 +24,7 @@ res.status(500).json({success:false,message:"something went wrong",error:e});
 const getallfav=async(req,res)=>{
 try{
   const favrecipes=await Favourite.find();
-const totalfavcounts=await favrecipes.aggregate([
+const totalfavcounts=await Favourite.aggregate([
   {
     $group:{
       _id:"$recipe_id",
