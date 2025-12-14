@@ -4,7 +4,7 @@ const router=express.Router();
 
 router.route("/add").post(createfav);
 
-router.route("/delete").delete(unfav);
+router.route("/delete/user/:user_id/recipe/:recipe_id").delete(unfav);
 router.route("/allmyfav").get(getallfav);
 
 module.exports=router;

@@ -28,7 +28,8 @@ const totalfavcounts=await Favourite.aggregate([
   {
     $group:{
       _id:"$recipe_id",
-      count:{$sum:1}
+      count:{$sum:1},
+
     }
   }
 ]);
@@ -46,7 +47,7 @@ const finalfavList=recipesList.map(rec=>{
    return {
     id:rec.toObject(),
     favCount: favMap[id] || 0,
-  
+    favusers:favMap[fav_by]
    }
 })
 
@@ -58,6 +59,24 @@ res.status(500).json({success:false,message:"somthing went wrong",error:e});
 }
 }
 
-const unfav=async(req,res)=>{}
+
+const unfav=async(req,res)=>{
+  const {user_id,recipe_id}=req.params;
+try{
+  await Favourite.deleteOne({user_id:user_id,recipe_id:recipe_id});
+
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const io=req.app.get("io");
+  io.emit("unfav",{ user_id:user_id,recipe_id:recipe_id})
+  res.status(200).json({sucess:true, message:"vote deleted",});
+  console.log("success");
+}catch(e){
+
+
+  console.log("something went wrong");
+  res.status(500).json({success:false,message:"some thing wernt wrong",error:e});
+}
+}
 
 module.exports={createfav,getallfav,unfav}
