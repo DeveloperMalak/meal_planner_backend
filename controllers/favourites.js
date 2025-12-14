@@ -47,7 +47,6 @@ const finalfavList=recipesList.map(rec=>{
    return {
     id:rec.toObject(),
     favCount: favMap[id] || 0,
-    favusers:favMap[fav_by]
    }
 })
 
