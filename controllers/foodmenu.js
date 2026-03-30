@@ -45,7 +45,7 @@ try{
      console.log("updated successfullu")
 
 }catch(e){
-    res.status(500).json({success:false,message:"something went wrong",error:e})
+    res.status(500).json({success:false,message:"something went wrong",error:e.message})
 }
 
 }
