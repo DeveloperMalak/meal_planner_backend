@@ -38,9 +38,9 @@ console.log(e);
 
 
 const updatefoodMenu=async(req,res)=>{
-    const {menuupdates}=req.body
+    const {menuupdates,id}=req.body
 try{
-     await Menu.updateOne({},{$set:menuupdates})
+     await Menu.updateOne({_id:id},{$set:menuupdates})
      res.status(200).json({success:true,message:"successfully updated"})
      console.log("updated successfullu")
 
